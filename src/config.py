@@ -1,0 +1,1 @@
+# Config variables (e.g., file paths, API keys)

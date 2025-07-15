@@ -1,0 +1,9 @@
+# Add your pip packages here
+pandas
+numpy
+scikit-learn
+xgboost
+fastf1
+streamlit
+fastapi
+uvicorn
