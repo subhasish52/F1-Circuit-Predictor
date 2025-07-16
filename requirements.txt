@@ -7,3 +7,4 @@ fastf1
 streamlit
 fastapi
 uvicorn
+fastf1>=3.1.4
