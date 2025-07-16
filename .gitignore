@@ -1,12 +1,14 @@
+# Python + Jupyter junk
 __pycache__/
 *.pkl
 .env
 .ipynb_checkpoints/
 
-# Ignore all data content
-/data/**
+# Ignore everything under data/
+data/**
 
-# But keep DVC metadata files
+# EXCEPT DVC cache and DVC tracking files
+!data/.dvc/
+!data/.dvc/**
 !data/**/*.dvc
 !data/.gitkeep
-data/
