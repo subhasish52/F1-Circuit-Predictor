@@ -2,3 +2,11 @@ __pycache__/
 *.pkl
 .env
 .ipynb_checkpoints/
+
+# Ignore all data content
+/data/**
+
+# But keep DVC metadata files
+!data/**/*.dvc
+!data/.gitkeep
+data/
