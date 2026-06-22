@@ -59,4 +59,4 @@ for file_name, content in files.items():
         f.write(content)
     print(f"Created file: {full_path}")
 
-print("\n✅ Project structure created successfully in current folder.")
+print("\n Project structure created successfully in current folder.")

@@ -10,7 +10,7 @@ os.makedirs('data/raw/cache', exist_ok=True)
 fastf1.Cache.enable_cache('data/raw/cache')
 
 # Define years and session types
-YEARS = list(range(2018, datetime.now().year + 1))  # From 2021 to current year
+YEARS = list(range(2018, datetime.now().year + 1))  # From 2018 to current year
 SESSION_TYPES = ['R', 'Q']  # Race and Qualifying
 
 
@@ -24,11 +24,11 @@ def download_all():
     drivers = []
 
     for year in YEARS:
-        print(f"\n➡️ Season: {year}")
+        print(f"\n[SEASON] Season: {year}")
         try:
             schedule = fastf1.get_event_schedule(year)
         except Exception as e:
-            print(f"⚠️ Could not fetch schedule for {year}: {e}")
+            print(f"[WARNING] Could not fetch schedule for {year}: {e}")
             continue
 
         for _, event in schedule.iterrows():
@@ -39,11 +39,11 @@ def download_all():
 
                 # Skip if data already exists
                 if os.path.exists(laps_file):
-                    print(f"🟡 Skipping {year}–{gp}–{sess}, data already exists.")
+                    print(f"[SKIPPED] Skipping {year}-{gp}-{sess}, data already exists.")
                     continue
 
                 try:
-                    print(f"⏱ Downloading {year}–{gp}–{sess}")
+                    print(f"[DOWNLOADING] Downloading {year}-{gp}-{sess}")
                     session = fastf1.get_session(year, gp, sess)
                     session.load()
 
@@ -68,7 +68,8 @@ def download_all():
                     sleep(1)
 
                 except Exception as ex:
-                    print(f"❌ Skipped {year}-{gp}-{sess}: {ex}")
+                    # Log exception using ASCII characters
+                    print(f"[ERROR] Skipped {year}-{gp}-{sess}: {str(ex)}")
 
     # Save processed data
     os.makedirs("data/processed", exist_ok=True)
@@ -90,7 +91,7 @@ def download_all():
     active = drv_counts[drv_counts >= 10].index.tolist()
     pd.DataFrame({'Driver': active}).to_csv("data/processed/active_drivers.csv", index=False)
 
-    print("\n✅ Download complete. All processed data saved.")
+    print("\n[SUCCESS] Download complete. All processed data saved.")
 
 
 if __name__ == "__main__":

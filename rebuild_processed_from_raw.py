@@ -12,15 +12,19 @@ def is_valid_csv(filepath):
         df = pd.read_csv(filepath)
         return not df.empty
     except Exception as e:
-        print(f"⚠️ Skipping invalid file: {filepath} ({e})")
+        print(f"[WARNING] Skipping invalid file: {filepath} ({e})")
         return False
 
 def rebuild_processed_data():
     all_laps, all_results, all_weather = [], [], []
 
-    # ✅ Use a more robust method to scan all folders inside raw/
+    # Use a more robust method to scan all folders inside raw/
+    if not os.path.exists(RAW_DIR):
+        print(f"[ERROR] Raw data folder does not exist: {RAW_DIR}")
+        return
+
     folders = [f.path for f in os.scandir(RAW_DIR) if f.is_dir()]
-    print(f"🔍 Found {len(folders)} session folders")
+    print(f"[INFO] Found {len(folders)} session folders")
 
     for folder in tqdm(folders, desc="Processing sessions"):
         try:
@@ -50,9 +54,9 @@ def rebuild_processed_data():
                 all_weather.append(df)
 
         except Exception as ex:
-            print(f"❌ Skipping {folder}: {ex}")
+            print(f"[ERROR] Skipping {folder}: {ex}")
 
-    print("\n💾 Writing merged processed files...")
+    print("\n[INFO] Writing merged processed files...")
     if all_laps:
         pd.concat(all_laps, ignore_index=True).to_csv(f"{PROCESSED_DIR}/all_laps.csv", index=False)
     if all_results:
@@ -65,7 +69,7 @@ def rebuild_processed_data():
         active = drivers[drivers >= 10].index.tolist()
         pd.DataFrame({'Driver': active}).to_csv(f"{PROCESSED_DIR}/active_drivers.csv", index=False)
 
-    print("\n✅ Finished rebuilding processed data.")
+    print("\n[SUCCESS] Finished rebuilding processed data.")
 
 if __name__ == "__main__":
     rebuild_processed_data()
